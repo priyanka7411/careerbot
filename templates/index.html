@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerBot - Your AI Career Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CareerBot</h1>
+            <p class="subtitle">Your AI-Powered Career Assistant</p>
+        </header>
+
+        <!-- Career Readiness Score Section -->
+        <div class="feature-section">
+            <h2>Career Readiness Score</h2>
+            <p class="description">Get your personalized career readiness analysis</p>
+
+            <!-- Input Form -->
+            <form id="readinessForm">
+                <!-- Resume Section -->
+                <div class="form-group">
+                    <label>Do you have a resume?</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="has_resume" value="true" required>
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="has_resume" value="false">
+                            No
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="resumeLengthGroup" style="display: none;">
+                    <label for="resume_length">Resume word count (approximate)</label>
+                    <input type="number" id="resume_length" name="resume_length" placeholder="e.g., 450" min="0">
+                    <small>Optimal range: 400-600 words</small>
+                </div>
+
+                <!-- Skills Section -->
+                <div class="form-group">
+                    <label for="skills_count">How many technical skills do you have?</label>
+                    <input type="number" id="skills_count" name="skills_count" placeholder="e.g., 5" min="0" required>
+                    <small>Count programming languages, tools, frameworks, etc.</small>
+                </div>
+
+                <!-- Experience Section -->
+                <div class="form-group">
+                    <label for="experience_years">Years of experience (including internships)</label>
+                    <input type="number" id="experience_years" name="experience_years" placeholder="e.g., 1.5" min="0" step="0.5" required>
+                    <small>Use 0 if you're a fresh graduate</small>
+                </div>
+
+                <!-- Projects Section -->
+                <div class="form-group">
+                    <label>Do you have projects to showcase?</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="has_projects" value="true" required>
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="has_projects" value="false">
+                            No
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="projectsCountGroup" style="display: none;">
+                    <label for="projects_count">How many projects?</label>
+                    <input type="number" id="projects_count" name="projects_count" placeholder="e.g., 3" min="0">
+                </div>
+
+                <button type="submit" class="btn-primary">Calculate My Score</button>
+            </form>
+
+            <!-- Results Section (hidden initially) -->
+            <div id="resultsSection" style="display: none;">
+                <div class="score-display">
+                    <div class="score-circle">
+                        <span id="totalScore">0</span>
+                        <span class="score-label">/100</span>
+                    </div>
+                    <h3 id="readinessLevel">Calculating...</h3>
+                </div>
+
+                <div class="breakdown">
+                    <h3>Score Breakdown</h3>
+                    <div class="breakdown-item">
+                        <span>Resume Quality</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="resumeProgress"></div>
+                        </div>
+                        <span id="resumeScore">0/25</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Skills Match</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="skillsProgress"></div>
+                        </div>
+                        <span id="skillsScore">0/25</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Experience Level</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="experienceProgress"></div>
+                        </div>
+                        <span id="experienceScore">0/25</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Project Portfolio</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="projectsProgress"></div>
+                        </div>
+                        <span id="projectsScore">0/25</span>
+                    </div>
+                </div>
+<!-- Skills Gap Analyzer Section -->
+        <div class="feature-section" style="margin-top: 50px;">
+            <h2>Skills Gap Analyzer</h2>
+            <p class="description">Compare your skills with job requirements and get a personalized learning path</p>
+
+            <!-- Step 1: Paste Job Description -->
+            <div id="jobDescriptionStep">
+                <div class="form-group">
+                    <label for="jobDescription">Paste the Job Description</label>
+                    <textarea id="jobDescription" rows="8" placeholder="Paste the complete job description here..."></textarea>
+                    <small>Include the full job posting with requirements and responsibilities</small>
+                </div>
+                <button class="btn-primary" onclick="extractSkills()">Analyze Job Requirements</button>
+            </div>
+
+            <!-- Step 2: Enter Your Skills -->
+            <div id="userSkillsStep" style="display: none;">
+                <div class="extracted-skills">
+                    <h3>Required Skills Identified</h3>
+                    <div id="requiredSkillsList"></div>
+                </div>
+
+                <div class="form-group" style="margin-top: 30px;">
+                    <label for="userSkills">Enter Your Skills (comma-separated)</label>
+                    <textarea id="userSkills" rows="4" placeholder="e.g., Python, JavaScript, React, SQL, Machine Learning"></textarea>
+                    <small>List all your technical skills separated by commas</small>
+                </div>
+
+                <button class="btn-primary" onclick="analyzeGap()">Analyze My Skill Gap</button>
+                <button class="btn-secondary" onclick="resetSkillsAnalyzer()">Start Over</button>
+            </div>
+
+            <!-- Step 3: Show Results -->
+            <div id="skillsGapResults" style="display: none;">
+                <div class="gap-analysis-header">
+                    <div class="readiness-badge">
+                        <span id="gapReadinessPercentage">0</span>%
+                        <p id="gapReadinessStatus">Analyzing...</p>
+                    </div>
+                </div>
+
+                <div class="skills-comparison">
+                    <div class="skills-column matching-skills">
+                        <h3>Skills You Have</h3>
+                        <div id="matchingSkillsList"></div>
+                    </div>
+
+                    <div class="skills-column missing-skills">
+                        <h3>Skills to Learn</h3>
+                        <div id="missingSkillsList"></div>
+                    </div>
+                </div>
+
+                <div class="recommendation-box">
+                    <h3>Recommendation</h3>
+                    <p id="gapRecommendation"></p>
+                </div>
+
+                <div class="learning-resources">
+                    <h3>Free Learning Resources</h3>
+                    <div id="learningResourcesList"></div>
+                </div>
+
+                <button class="btn-secondary" onclick="resetSkillsAnalyzer()">Analyze Another Job</button>
+            </div>
+        </div>
+                <div class="feedback-section">
+                    <h3>Personalized Recommendations</h3>
+                    <ul id="feedbackList"></ul>
+                </div>
+
+                <button class="btn-secondary" onclick="resetForm()">Calculate Again</button>
+            </div>
+        </div>
+    </div>
+<!-- Resume Roast Mode Section -->
+        <div class="feature-section" style="margin-top: 50px;">
+            <h2>Resume Roast Mode</h2>
+            <p class="description">Get brutally honest feedback on your resume (ATS + Human perspective)</p>
+
+            <!-- Upload Section -->
+            <div id="resumeUploadSection">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📄</div>
+                    <h3>Drop your resume here or click to upload</h3>
+                    <p>Supports PDF and DOCX files (Max 5MB)</p>
+                    <input type="file" id="resumeFile" accept=".pdf,.docx" style="display: none;">
+                    <button class="btn-primary" onclick="document.getElementById('resumeFile').click()">
+                        Choose File
+                    </button>
+                </div>
+                <div id="fileName" style="display: none; margin-top: 15px; text-align: center; color: #667eea; font-weight: 600;"></div>
+                <button id="analyzeResumeBtn" class="btn-primary" style="display: none; margin-top: 20px;" onclick="uploadAndAnalyzeResume()">
+                    Analyze My Resume
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resumeAnalysisResults" style="display: none;">
+                <!-- Overall Score -->
+                <div class="resume-score-card">
+                    <div class="score-big">
+                        <span id="resumeTotalScore">0</span>
+                        <span class="score-max">/100</span>
+                    </div>
+                    <h3 id="resumeOverallAssessment">Analyzing...</h3>
+                    <p id="resumeWordCount" style="color: #666; margin-top: 10px;"></p>
+                </div>
+
+                <!-- Score Breakdown -->
+                <div class="resume-breakdown">
+                    <h3>Detailed Score Breakdown</h3>
+                    
+                    <div class="score-item">
+                        <div class="score-label">
+                            <span>Resume Length</span>
+                            <span id="lengthScore" class="score-value">0/20</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="lengthProgress"></div>
+                        </div>
+                    </div>
+
+                    <div class="score-item">
+                        <div class="score-label">
+                            <span>Keywords & ATS</span>
+                            <span id="keywordsScore" class="score-value">0/20</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="keywordsProgress"></div>
+                        </div>
+                    </div>
+
+                    <div class="score-item">
+                        <div class="score-label">
+                            <span>Formatting & Structure</span>
+                            <span id="formattingScore" class="score-value">0/20</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="formattingProgress"></div>
+                        </div>
+                    </div>
+
+                    <div class="score-item">
+                        <div class="score-label">
+                            <span>Contact Information</span>
+                            <span id="contactScore" class="score-value">0/20</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="contactProgress"></div>
+                        </div>
+                    </div>
+
+                    <div class="score-item">
+                        <div class="score-label">
+                            <span>Action Verbs & Impact</span>
+                            <span id="actionScore" class="score-value">0/20</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="actionProgress"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Honest Feedback -->
+                <div class="honest-feedback">
+                    <h3>The Brutal Truth</h3>
+                    <ul id="bruthalFeedbackList"></ul>
+                </div>
+
+                <!-- Improvements Section -->
+                <div class="improvements-section">
+                    <h3>How to Fix It</h3>
+                    <div id="improvementsList"></div>
+                </div>
+
+                <button class="btn-secondary" onclick="resetResumeAnalyzer()">Analyze Another Resume</button>
+            </div>
+        </div>
+        <!-- Job Application Tracker Section -->
+        <div class="feature-section" style="margin-top: 50px;">
+            <h2>Job Application Tracker</h2>
+            <p class="description">Track your applications and never miss a follow-up</p>
+
+            <!-- Notifications Bar -->
+            <div id="notificationsBar" style="display: none;">
+                <div class="notification-badge">
+                    <span id="notificationCount">0</span> pending follow-ups today!
+                    <button class="btn-small" onclick="showReminders()">View Reminders</button>
+                </div>
+            </div>
+
+            <!-- Statistics Dashboard -->
+            <div class="stats-dashboard">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalApps">0</div>
+                    <div class="stat-label">Total Applications</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="responseRate">0%</div>
+                    <div class="stat-label">Response Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="interviewCount">0</div>
+                    <div class="stat-label">Interviews</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="offerCount">0</div>
+                    <div class="stat-label">Offers</div>
+                </div>
+            </div>
+
+            <!-- Add New Application Form -->
+            <div class="add-application-section">
+                <button class="btn-primary" onclick="toggleAddForm()">+ Add New Application</button>
+                
+                <div id="addApplicationForm" style="display: none; margin-top: 20px;">
+                    <form id="jobApplicationForm" onsubmit="return false;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="company">Company Name *</label>
+                                <input type="text" id="company" required placeholder="e.g., Google">
+                            </div>
+                            <div class="form-group">
+                                <label for="position">Position *</label>
+                                <input type="text" id="position" required placeholder="e.g., Software Engineer">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="job_url">Job URL</label>
+                                <input type="url" id="job_url" placeholder="https://...">
+                            </div>
+                            <div class="form-group">
+                                <label for="date_applied">Date Applied</label>
+                                <input type="date" id="date_applied">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="notes">Notes</label>
+                            <textarea id="notes" rows="3" placeholder="Any additional notes about this application..."></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn-primary" onclick="addJobApplication()">Add Application</button>
+                            <button type="button" class="btn-secondary" onclick="toggleAddForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Applications List -->
+            <div class="applications-list">
+                <h3>Your Applications</h3>
+                <div id="applicationsContainer">
+                    <p class="empty-state">No applications yet. Add your first application to start tracking!</p>
+                </div>
+            </div>
+
+            <!-- Reminders Modal -->
+            <div id="remindersModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Follow-Up Reminders</h3>
+                        <button class="close-modal" onclick="closeRemindersModal()">&times;</button>
+                    </div>
+                    <div class="modal-body" id="remindersList">
+                        <!-- Reminders will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Template Modal -->
+            <div id="emailModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Follow-Up Email Template</h3>
+                        <button class="close-modal" onclick="closeEmailModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea id="emailTemplate" rows="15" readonly></textarea>
+                        <button class="btn-primary" onclick="copyEmailTemplate()">Copy to Clipboard</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- Mock Interview Section -->
+        <div class="feature-section" style="margin-top: 50px;">
+            <h2>Mock Interview Practice</h2>
+            <p class="description">Practice with AI-powered interview feedback</p>
+
+            <!-- Start Interview Form -->
+            <div id="interviewStartSection">
+                <div class="interview-setup">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="interview_company">Company Type</label>
+                            <select id="interview_company" class="form-select">
+                                <option value="general">General / Any Company</option>
+                                <option value="google">Google / Big Tech</option>
+                                <option value="amazon">Amazon</option>
+                                <option value="microsoft">Microsoft</option>
+                                <option value="startup">Startup</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="interview_role">Role</label>
+                            <input type="text" id="interview_role" placeholder="e.g., Data Scientist" value="Software Engineer">
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="startInterview()">Start Mock Interview</button>
+                </div>
+            </div>
+
+            <!-- Interview In Progress -->
+            <div id="interviewInProgress" style="display: none;">
+                <div class="interview-header">
+                    <div class="interview-info">
+                        <h3 id="interviewCompanyName">Company Name</h3>
+                        <p id="interviewRoleName">Role</p>
+                    </div>
+                    <div class="question-counter">
+                        Question <span id="currentQuestionNum">1</span> of <span id="totalQuestions">5</span>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <h3>Interview Question:</h3>
+                    <p id="currentQuestion" class="question-text"></p>
+                </div>
+
+                <div class="answer-section">
+                    <label for="userAnswer">Your Answer:</label>
+                    <textarea id="userAnswer" rows="8" placeholder="Type your answer here... Speak naturally as you would in a real interview."></textarea>
+                    <small>Tip: Avoid filler words like "um", "like", "you know"</small>
+                    
+                    <div class="interview-actions">
+                        <button class="btn-primary" onclick="submitAnswer()">Submit Answer</button>
+                        <button class="btn-secondary" onclick="endInterview()">End Interview</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback Display -->
+            <div id="feedbackSection" style="display: none;">
+                <div class="feedback-card">
+                    <h3>AI Feedback on Your Answer</h3>
+                    
+                    <div class="score-grid">
+                        <div class="score-box">
+                            <div class="score-number" id="contentScore">0</div>
+                            <div class="score-name">Content</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-number" id="communicationScore">0</div>
+                            <div class="score-name">Communication</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-number" id="confidenceScore">0</div>
+                            <div class="score-name">Confidence</div>
+                        </div>
+                    </div>
+
+                    <div class="detailed-feedback">
+                        <h4>Detailed Feedback:</h4>
+                        <div id="aiFeedbackText" class="feedback-text"></div>
+                    </div>
+
+                    <div id="fillerWordsAlert" style="display: none;" class="filler-alert">
+                        <h4>Filler Words Detected:</h4>
+                        <div id="fillerWordsList"></div>
+                    </div>
+
+                    <button class="btn-primary" id="nextQuestionBtn" onclick="nextQuestion()">Next Question</button>
+                </div>
+            </div>
+
+            <!-- Final Results -->
+            <div id="finalResultsSection" style="display: none;">
+                <div class="final-results-card">
+                    <h2>Interview Complete!</h2>
+                    
+                    <div class="overall-score-display">
+                        <div class="overall-score-circle">
+                            <span id="overallScore">0</span>
+                            <span class="score-label-small">/100</span>
+                        </div>
+                        <p class="score-description">Overall Performance</p>
+                    </div>
+
+                    <div class="final-scores-breakdown">
+                        <div class="final-score-item">
+                            <span class="final-score-label">Content Quality</span>
+                            <div class="final-score-bar">
+                                <div class="final-score-fill" id="finalContentBar"></div>
+                            </div>
+                            <span id="finalContentScore">0/10</span>
+                        </div>
+                        <div class="final-score-item">
+                            <span class="final-score-label">Communication</span>
+                            <div class="final-score-bar">
+                                <div class="final-score-fill" id="finalCommBar"></div>
+                            </div>
+                            <span id="finalCommScore">0/10</span>
+                        </div>
+                        <div class="final-score-item">
+                            <span class="final-score-label">Confidence</span>
+                            <div class="final-score-bar">
+                                <div class="final-score-fill" id="finalConfBar"></div>
+                            </div>
+                            <span id="finalConfScore">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="interview-summary">
+                        <h3>Your Answers Summary</h3>
+                        <div id="answersSummary"></div>
+                    </div>
+
+                    <button class="btn-primary" onclick="resetInterview()">Start New Interview</button>
+                </div>
+            </div>
+        </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

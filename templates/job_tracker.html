@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Tracker - CareerBot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="back-button">← Back to Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Job Application Tracker</h1>
+            <p>Track your applications and never miss a follow-up</p>
+        </div>
+
+        <!-- Job Application Tracker Section -->
+        <div class="feature-section">
+            <!-- Notifications Bar -->
+            <div id="notificationsBar" style="display: none;">
+                <div class="notification-badge">
+                    <span id="notificationCount">0</span> pending follow-ups today!
+                    <button class="btn-small" onclick="showReminders()">View Reminders</button>
+                </div>
+            </div>
+
+            <!-- Statistics Dashboard -->
+            <div class="stats-dashboard">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalApps">0</div>
+                    <div class="stat-label">Total Applications</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="responseRate">0%</div>
+                    <div class="stat-label">Response Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="interviewCount">0</div>
+                    <div class="stat-label">Interviews</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="offerCount">0</div>
+                    <div class="stat-label">Offers</div>
+                </div>
+            </div>
+
+            <!-- Add New Application Form -->
+            <div class="add-application-section">
+                <button class="btn-primary" onclick="toggleAddForm()">+ Add New Application</button>
+                
+                <div id="addApplicationForm" style="display: none; margin-top: 20px;">
+                    <form id="jobApplicationForm" onsubmit="return false;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="company">Company Name *</label>
+                                <input type="text" id="company" required placeholder="e.g., Google">
+                            </div>
+                            <div class="form-group">
+                                <label for="position">Position *</label>
+                                <input type="text" id="position" required placeholder="e.g., Software Engineer">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="job_url">Job URL</label>
+                                <input type="url" id="job_url" placeholder="https://...">
+                            </div>
+                            <div class="form-group">
+                                <label for="date_applied">Date Applied</label>
+                                <input type="date" id="date_applied">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="notes">Notes</label>
+                            <textarea id="notes" rows="3" placeholder="Any additional notes about this application..."></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn-primary" onclick="addJobApplication()">Add Application</button>
+                            <button type="button" class="btn-secondary" onclick="toggleAddForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Applications List -->
+            <div class="applications-list">
+                <h3>Your Applications</h3>
+                <div id="applicationsContainer">
+                    <p class="empty-state">No applications yet. Add your first application to start tracking!</p>
+                </div>
+            </div>
+
+            <!-- Reminders Modal -->
+            <div id="remindersModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Follow-Up Reminders</h3>
+                        <button class="close-modal" onclick="closeRemindersModal()">&times;</button>
+                    </div>
+                    <div class="modal-body" id="remindersList">
+                        <!-- Reminders will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Template Modal -->
+            <div id="emailModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Follow-Up Email Template</h3>
+                        <button class="close-modal" onclick="closeEmailModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea id="emailTemplate" rows="15" readonly></textarea>
+                        <button class="btn-primary" onclick="copyEmailTemplate()">Copy to Clipboard</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

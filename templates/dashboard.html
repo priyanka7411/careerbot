@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerBot - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>CareerBot</h2>
+                <p>Your AI Career Assistant</p>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Welcome to CareerBot</h1>
+            <p class="dashboard-subtitle">Choose a tool to boost your career journey</p>
+        </div>
+
+        <!-- Feature Cards Grid -->
+        <div class="features-grid">
+            <!-- Card 1: Career Readiness Score -->
+            <a href="/readiness" class="feature-card">
+                <div class="card-icon">📊</div>
+                <h3>Career Readiness Score</h3>
+                <p>Get your personalized career readiness analysis with actionable insights</p>
+                <div class="card-footer">
+                    <span class="card-badge">Quick Assessment</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+
+            <!-- Card 2: Skills Gap Analyzer -->
+            <a href="/skills-gap" class="feature-card">
+                <div class="card-icon">🎯</div>
+                <h3>Skills Gap Analyzer</h3>
+                <p>Compare your skills with job requirements and get learning resources</p>
+                <div class="card-footer">
+                    <span class="card-badge">Job Matching</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+
+            <!-- Card 3: Resume Roast Mode -->
+            <a href="/resume-roast" class="feature-card">
+                <div class="card-icon">📄</div>
+                <h3>Resume Roast Mode</h3>
+                <p>Get brutally honest AI feedback on your resume with improvement tips</p>
+                <div class="card-footer">
+                    <span class="card-badge">ATS Friendly</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+
+            <!-- Card 4: Job Application Tracker -->
+            <a href="/job-tracker" class="feature-card">
+                <div class="card-icon">📋</div>
+                <h3>Job Application Tracker</h3>
+                <p>Track applications and get follow-up reminders to stay organized</p>
+                <div class="card-footer">
+                    <span class="card-badge">Stay Organized</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+
+            <!-- Card 5: Mock Interview -->
+            <a href="/mock-interview" class="feature-card">
+                <div class="card-icon">🎤</div>
+                <h3>Mock Interview Practice</h3>
+                <p>Practice with AI-powered interviews and get detailed feedback</p>
+                <div class="card-footer">
+                    <span class="card-badge">AI Powered</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="dashboard-stats">
+            <div class="stat-item">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Powerful Tools</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Free to Use</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">AI</div>
+                <div class="stat-label">Powered Feedback</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+        <p>Built with ❤️ for job seekers | CareerBot v1.0</p>
+    </footer>
+</body>
+</html>

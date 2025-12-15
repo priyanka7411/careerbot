@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Interview - CareerBot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="back-button">← Back to Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Mock Interview Practice</h1>
+            <p>Practice with AI-powered interview feedback</p>
+        </div>
+
+        <!-- Mock Interview Section -->
+        <div class="feature-section">
+            <!-- Start Interview Form -->
+            <div id="interviewStartSection">
+                <div class="interview-setup">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="interview_company">Company Type</label>
+                            <select id="interview_company" class="form-select">
+                                <option value="general">General / Any Company</option>
+                                <option value="google">Google / Big Tech</option>
+                                <option value="amazon">Amazon</option>
+                                <option value="microsoft">Microsoft</option>
+                                <option value="startup">Startup</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="interview_role">Role</label>
+                            <input type="text" id="interview_role" placeholder="e.g., Data Scientist" value="Software Engineer">
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="startInterview()">Start Mock Interview</button>
+                </div>
+            </div>
+
+            <!-- Interview In Progress -->
+            <div id="interviewInProgress" style="display: none;">
+                <div class="interview-header">
+                    <div class="interview-info">
+                        <h3 id="interviewCompanyName">Company Name</h3>
+                        <p id="interviewRoleName">Role</p>
+                    </div>
+                    <div class="question-counter">
+                        Question <span id="currentQuestionNum">1</span> of <span id="totalQuestions">5</span>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <h3>Interview Question:</h3>
+                    <p id="currentQuestion" class="question-text"></p>
+                </div>
+
+                <div class="answer-section">
+                    <label for="userAnswer">Your Answer:</label>
+                    <textarea id="userAnswer" rows="8" placeholder="Type your answer here... Speak naturally as you would in a real interview."></textarea>
+                    <small>Tip: Avoid filler words like "um", "like", "you know"</small>
+                    
+                    <div class="interview-actions">
+                        <button class="btn-primary" onclick="submitAnswer()">Submit Answer</button>
+                        <button class="btn-secondary" onclick="endInterview()">End Interview</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback Display -->
+            <div id="feedbackSection" style="display: none;">
+                <div class="feedback-card">
+                    <h3>AI Feedback on Your Answer</h3>
+                    
+                    <div class="score-grid">
+                        <div class="score-box">
+                            <div class="score-number" id="contentScore">0</div>
+                            <div class="score-name">Content</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-number" id="communicationScore">0</div>
+                            <div class="score-name">Communication</div>
+                        </div>
+                        <div class="score-box">
+                            <div class="score-number" id="confidenceScore">0</div>
+                            <div class="score-name">Confidence</div>
+                        </div>
+                    </div>
+
+                    <div class="detailed-feedback">
+                        <h4>Detailed Feedback:</h4>
+                        <div id="aiFeedbackText" class="feedback-text"></div>
+                    </div>
+
+                    <div id="fillerWordsAlert" style="display: none;" class="filler-alert">
+                        <h4>Filler Words Detected:</h4>
+                        <div id="fillerWordsList"></div>
+                    </div>
+
+                    <button class="btn-primary" id="nextQuestionBtn" onclick="nextQuestion()">Next Question</button>
+                </div>
+            </div>
+
+            <!-- Final Results -->
+            <div id="finalResultsSection" style="display: none;">
+                <div class="final-results-card">
+                    <h2>Interview Complete!</h2>
+                    
+                    <div class="overall-score-display">
+                        <div class="overall-score-circle">
+                            <span id="overallScore">0</span>
+                            <span class="score-label-small">/100</span>
+                        </div>
+                        <p class="score-description">Overall Performance</p>
+                    </div>
+
+                    <div class="final-scores-breakdown">
+                        <div class="final-score-item">
+                            <span class="final-score-label">Content Quality</span>
+                            <div class="final-score-bar">
+                                <div class="final-score-fill" id="finalContentBar"></div>
+                            </div>
+                            <span id="finalContentScore">0/10</span>
+                        </div>
+                        <div class="final-score-item">
+                            <span class="final-score-label">Communication</span>
+                            <div class="final-score-bar">
+                                <div class="final-score-fill" id="finalCommBar"></div>
+                            </div>
+                            <span id="finalCommScore">0/10</span>
+                        </div>
+                        <div class="final-score-item">
+                            <span class="final-score-label">Confidence</span>
+                            <div class="final-score-bar">
+                                <div class="final-score-fill" id="finalConfBar"></div>
+                            </div>
+                            <span id="finalConfScore">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="interview-summary">
+                        <h3>Your Answers Summary</h3>
+                        <div id="answersSummary"></div>
+                    </div>
+
+                    <button class="btn-primary" onclick="resetInterview()">Start New Interview</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

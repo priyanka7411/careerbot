@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Roast Mode - CareerBot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="back-button">← Back to Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Resume Roast Mode</h1>
+            <p>Get brutally honest feedback on your resume (ATS + Human perspective)</p>
+        </div>
+
+        <!-- Resume Roast Mode Section -->
+        <div class="feature-section">
+            <!-- Upload Section -->
+            <div id="resumeUploadSection">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📄</div>
+                    <h3>Drop your resume here or click to upload</h3>
+                    <p>Supports PDF and DOCX files (Max 5MB)</p>
+                    <input type="file" id="resumeFile" accept=".pdf,.docx" style="display: none;">
+                    <button class="btn-primary" onclick="document.getElementById('resumeFile').click()">
+                        Choose File
+                    </button>
+                </div>
+                <div id="fileName" style="display: none; margin-top: 15px; text-align: center; color: #667eea; font-weight: 600;"></div>
+                <button id="analyzeResumeBtn" class="btn-primary" style="display: none; margin-top: 20px;" onclick="uploadAndAnalyzeResume()">
+                    Analyze My Resume
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resumeAnalysisResults" style="display: none;">
+                <!-- Overall Score -->
+                <div class="resume-score-card">
+                    <div class="score-big">
+                        <span id="resumeTotalScore">0</span>
+                        <span class="score-max">/100</span>
+                    </div>
+                    <h3 id="resumeOverallAssessment">Analyzing...</h3>
+                    <p id="resumeWordCount" style="color: #fff; margin-top: 10px;"></p>
+                </div>
+
+                <!-- Score Breakdown -->
+                <div class="resume-breakdown">
+                    <h3>Detailed Score Breakdown</h3>
+                    
+                    <div class="score-item">
+                        <div class="score-label">
+                            <span>Resume Length</span>
+                            <span id="lengthScore" class="score-value">0/20</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="lengthProgress"></div>
+                        </div>
+                    </div>
+
+                    <div class="score-item">
+                        <div class="score-label">
+                            <span>Keywords & ATS</span>
+                            <span id="keywordsScore" class="score-value">0/20</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="keywordsProgress"></div>
+                        </div>
+                    </div>
+
+                    <div class="score-item">
+                        <div class="score-label">
+                            <span>Formatting & Structure</span>
+                            <span id="formattingScore" class="score-value">0/20</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="formattingProgress"></div>
+                        </div>
+                    </div>
+
+                    <div class="score-item">
+                        <div class="score-label">
+                            <span>Contact Information</span>
+                            <span id="contactScore" class="score-value">0/20</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="contactProgress"></div>
+                        </div>
+                    </div>
+
+                    <div class="score-item">
+                        <div class="score-label">
+                            <span>Action Verbs & Impact</span>
+                            <span id="actionScore" class="score-value">0/20</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="actionProgress"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Honest Feedback -->
+                <div class="honest-feedback">
+                    <h3>The Brutal Truth</h3>
+                    <ul id="bruthalFeedbackList"></ul>
+                </div>
+
+                <!-- Improvements Section -->
+                <div class="improvements-section">
+                    <h3>How to Fix It</h3>
+                    <div id="improvementsList"></div>
+                </div>
+
+                <button class="btn-secondary" onclick="resetResumeAnalyzer()">Analyze Another Resume</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

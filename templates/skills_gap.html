@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills Gap Analyzer - CareerBot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="back-button">← Back to Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Skills Gap Analyzer</h1>
+            <p>Compare your skills with job requirements and get a personalized learning path</p>
+        </div>
+
+        <!-- Skills Gap Analyzer Section -->
+        <div class="feature-section">
+            <!-- Step 1: Paste Job Description -->
+            <div id="jobDescriptionStep">
+                <div class="form-group">
+                    <label for="jobDescription">Paste the Job Description</label>
+                    <textarea id="jobDescription" rows="8" placeholder="Paste the complete job description here..."></textarea>
+                    <small>Include the full job posting with requirements and responsibilities</small>
+                </div>
+                <button class="btn-primary" onclick="extractSkills()">Analyze Job Requirements</button>
+            </div>
+
+            <!-- Step 2: Enter Your Skills -->
+            <div id="userSkillsStep" style="display: none;">
+                <div class="extracted-skills">
+                    <h3>Required Skills Identified</h3>
+                    <div id="requiredSkillsList"></div>
+                </div>
+
+                <div class="form-group" style="margin-top: 30px;">
+                    <label for="userSkills">Enter Your Skills (comma-separated)</label>
+                    <textarea id="userSkills" rows="4" placeholder="e.g., Python, JavaScript, React, SQL, Machine Learning"></textarea>
+                    <small>List all your technical skills separated by commas</small>
+                </div>
+
+                <button class="btn-primary" onclick="analyzeGap()">Analyze My Skill Gap</button>
+                <button class="btn-secondary" onclick="resetSkillsAnalyzer()">Start Over</button>
+            </div>
+
+            <!-- Step 3: Show Results -->
+            <div id="skillsGapResults" style="display: none;">
+                <div class="gap-analysis-header">
+                    <div class="readiness-badge">
+                        <span id="gapReadinessPercentage">0</span>%
+                        <p id="gapReadinessStatus">Analyzing...</p>
+                    </div>
+                </div>
+
+                <div class="skills-comparison">
+                    <div class="skills-column matching-skills">
+                        <h3>Skills You Have</h3>
+                        <div id="matchingSkillsList"></div>
+                    </div>
+
+                    <div class="skills-column missing-skills">
+                        <h3>Skills to Learn</h3>
+                        <div id="missingSkillsList"></div>
+                    </div>
+                </div>
+
+                <div class="recommendation-box">
+                    <h3>Recommendation</h3>
+                    <p id="gapRecommendation"></p>
+                </div>
+
+                <div class="learning-resources">
+                    <h3>Free Learning Resources</h3>
+                    <div id="learningResourcesList"></div>
+                </div>
+
+                <button class="btn-secondary" onclick="resetSkillsAnalyzer()">Analyze Another Job</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

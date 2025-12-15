@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Readiness Score - CareerBot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="back-button">← Back to Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Career Readiness Score</h1>
+            <p>Get your personalized career readiness analysis</p>
+        </div>
+
+        <!-- Career Readiness Score Section -->
+        <div class="feature-section">
+            <!-- Input Form -->
+            <form id="readinessForm">
+                <!-- Resume Section -->
+                <div class="form-group">
+                    <label>Do you have a resume?</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="has_resume" value="true" required>
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="has_resume" value="false">
+                            No
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="resumeLengthGroup" style="display: none;">
+                    <label for="resume_length">Resume word count (approximate)</label>
+                    <input type="number" id="resume_length" name="resume_length" placeholder="e.g., 450" min="0">
+                    <small>Optimal range: 400-600 words</small>
+                </div>
+
+                <!-- Skills Section -->
+                <div class="form-group">
+                    <label for="skills_count">How many technical skills do you have?</label>
+                    <input type="number" id="skills_count" name="skills_count" placeholder="e.g., 5" min="0" required>
+                    <small>Count programming languages, tools, frameworks, etc.</small>
+                </div>
+
+                <!-- Experience Section -->
+                <div class="form-group">
+                    <label for="experience_years">Years of experience (including internships)</label>
+                    <input type="number" id="experience_years" name="experience_years" placeholder="e.g., 1.5" min="0" step="0.5" required>
+                    <small>Use 0 if you're a fresh graduate</small>
+                </div>
+
+                <!-- Projects Section -->
+                <div class="form-group">
+                    <label>Do you have projects to showcase?</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="has_projects" value="true" required>
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="has_projects" value="false">
+                            No
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="projectsCountGroup" style="display: none;">
+                    <label for="projects_count">How many projects?</label>
+                    <input type="number" id="projects_count" name="projects_count" placeholder="e.g., 3" min="0">
+                </div>
+
+                <button type="submit" class="btn-primary">Calculate My Score</button>
+            </form>
+
+            <!-- Results Section (hidden initially) -->
+            <div id="resultsSection" style="display: none;">
+                <div class="score-display">
+                    <div class="score-circle">
+                        <span id="totalScore">0</span>
+                        <span class="score-label">/100</span>
+                    </div>
+                    <h3 id="readinessLevel">Calculating...</h3>
+                </div>
+
+                <div class="breakdown">
+                    <h3>Score Breakdown</h3>
+                    <div class="breakdown-item">
+                        <span>Resume Quality</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="resumeProgress"></div>
+                        </div>
+                        <span id="resumeScore">0/25</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Skills Match</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="skillsProgress"></div>
+                        </div>
+                        <span id="skillsScore">0/25</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Experience Level</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="experienceProgress"></div>
+                        </div>
+                        <span id="experienceScore">0/25</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Project Portfolio</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="projectsProgress"></div>
+                        </div>
+                        <span id="projectsScore">0/25</span>
+                    </div>
+                </div>
+
+                <div class="feedback-section">
+                    <h3>Personalized Recommendations</h3>
+                    <ul id="feedbackList"></ul>
+                </div>
+
+                <button class="btn-secondary" onclick="resetForm()">Calculate Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
